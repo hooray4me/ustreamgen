@@ -21,6 +21,13 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag hooray4rob/ustreamgen:v.1.1
+      run: docker build . --file Dockerfile --tag hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
     - name: Docker Push
-      run: docker push hooray4rob/ustreamgen:v.1.1
+      run: docker push hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
+    - name: Update Minor Version
+      uses: hmanzur/actions-set-secret@v2.0.0
+      with:
+        name: 'MINOR'
+        value: $((${{ secrets.MINOR }}+1))
+        repository: hooray4me/ustreamgen
+        token: ${{ secrets.REPO_ACCESS_TOKEN }}
