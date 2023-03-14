@@ -24,14 +24,12 @@ jobs:
       with:
         username: ${{secrets.DOCKER_USER}}
         password: ${{secrets.DOCKER_PASSWORD}}
-    - name: Autoincrement a new patch version 
-      run: echo "NEW_VERSION=${{ secrets.MAJOR }}.${{ secrets.MINOR }}" >> $GITHUB_ENV
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
         context: .
         push: true
-        tags: hooray4rob/ustreamgen:latest,hooray4rob/ustreamgen:v$NEW_VERSION
+        tags: hooray4rob/ustreamgen:latest
     - name: Update Minor Version
       uses: hmanzur/actions-set-secret@v2.0.0
       with:
