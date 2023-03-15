@@ -24,16 +24,16 @@ jobs:
       with:
         username: ${{secrets.DOCKER_USER}}
         password: ${{secrets.DOCKER_PASSWORD}}
+    - name: Build Revision
+      run: docker build . --tag hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
+    - name: Push Revision
+      run: docker push hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
         context: .
         push: true
         tags: hooray4rob/ustreamgen:latest
-    - name: Docker Tag
-      run: docker tag hooray4rob/ustreamgen:latest hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
-    - name: Push Version
-      run: docker push hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
     - name: Update Minor Version
       uses: hmanzur/actions-set-secret@v2.0.0
       with:
