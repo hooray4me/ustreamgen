@@ -24,10 +24,10 @@ services:
       - /path/to/folder/for/tv/strm/files1:/tv
       - /path/to/folder/for/movie/strm/files1:/movies
       - /path/to/logs:/logs
-      ```
+```
 
-      docker-cli
-      ```
+docker-cli
+```
       docker run -d \
   --name ustreamgen \
   -e PUID=1000 \
