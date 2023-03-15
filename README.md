@@ -1,5 +1,6 @@
 # ustreamgen
 Universal m3u to strm file generator
+Docker Image: https://hub.docker.com/r/hooray4rob/ustreamgen
 
 docker-compose:
 ```
