@@ -1,13 +1,26 @@
 # ustreamgen
-Universal m3u to strm file generator  
-Docker Image: https://hub.docker.com/r/hooray4rob/ustreamgen
+This is *hopefully* a universal M3U to strm file generator.  
+
+Docker Image: https://hub.docker.com/r/hooray4rob/ustreamgen  
+
+It creates a folder structure of strm files for movies and tv series.
+
+When the container starts up it will **immediately** pull all tvshows and then movies. 
+
+It will also **create a job** that runs at an interval you specify, to pull the latest content.  
+
+Make sure you have the **correct** tv and movie paths...  
+
+**DON'T point it at your existing movies and tv shows**... make **new** folders first!
+
+> The example below creates a job that pulls new tv shows at 12:10am and new movies at 12:20am in the timezone specified.
 
 docker-compose:
-```
+```yaml
 version: "3"
 services:
   streamgen:
-    image: hooray4rob/ustreamgen:v1.0
+    image: hooray4rob/ustreamgen:latest
     container_name: ustreamgen
     command: /root/initialize_cron.sh
     environment:
@@ -28,8 +41,8 @@ services:
 ```
 
 docker-cli
-```
-      docker run -d \
+```yaml
+docker run -d \
   --name ustreamgen \
   -e PUID=1000 \
   -e PGID=1000 \
@@ -45,5 +58,5 @@ docker-cli
   -v /path/to/folder/for/movie/strm/files:/movies \
   -v /path/to/logs:/logs
   /root/initialize_cron.sh
-hooray4rob/ustreamgen:v1.0
+hooray4rob/ustreamgen:latest
 ```
