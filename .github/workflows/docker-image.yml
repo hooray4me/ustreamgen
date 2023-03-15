@@ -28,12 +28,10 @@ jobs:
       run: docker build . --tag hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
     - name: Push Revision
       run: docker push hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
-    - name: Build and push
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        push: true
-        tags: hooray4rob/ustreamgen:latest
+    - name: Tag latest
+      run: docker tag hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }} hooray4rob/ustreamgen:latest
+    - name: Push latest
+      run: docker push hooray4rob/ustreamgen:latest
     - name: Update Minor Version
       uses: hmanzur/actions-set-secret@v2.0.0
       with:
