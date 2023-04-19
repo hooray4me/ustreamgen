@@ -131,7 +131,7 @@ class rawStreamList(object):
     self.parseLine()
 
   def readLines(self):
-    self.lines = [line.rstrip('\n') for line in open(self.filename, encoding="utf8")]
+    self.lines = [line.rstrip('\n') for line in open(self.filename, encoding="ISO-8859-1")]
     return len(self.lines)
  
   def parseLine(self):
