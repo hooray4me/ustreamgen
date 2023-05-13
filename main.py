@@ -16,7 +16,7 @@ directory =  os.path.abspath(os.path.dirname(__file__))
 
 print('...Starting Download...')
 if funct == 'tv' and apollo == 'true':
-    for i in range(1,21):
+    for i in range(1,24):
         url = providerurl  + str(i)
         print(wget.download(url, ('m3u/tvshows-'+str(i)+'.m3u')))
         apollolist = streamClasses.rawStreamList('m3u/tvshows-'+str(i)+'.m3u')
