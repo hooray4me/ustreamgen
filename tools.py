@@ -12,7 +12,13 @@ def tvgTypeMatch(line):
   if typematch:
     return typematch
   return
-  
+
+def eventMatch(line):
+  eventmatch = re.compile('tvg-type=\"events\"', re.IGNORECASE).search(line)
+  if eventmatch:
+    return eventmatch
+  return
+
 def ufcwweMatch(line):
   ufcwwematch = re.compile('[U][f][c]|[w][w][e]|[r][i][d][i][c][u][l]', re.IGNORECASE).search(line)
   if ufcwwematch:
@@ -157,6 +163,11 @@ def parseResolution(match):
     return '480p'
   return
 
+def parseGroup(match):
+  groupmatch = match.group().strip()
+  groupparse = re.findall('group-title=\"(.*?)\"', groupmatch)
+  return groupparse[0]
+
 def makeStrm(filename, url):
   if not os.path.exists(filename):
     streamfile = open(filename, "w+")
@@ -250,4 +261,23 @@ def compare_and_update(dcmp):
             shutil.copy2(dcmp.left+"/"+name, dcmp.right+"/"+name)
     for sub_dcmp in dcmp.subdirs.values():
         compare_and_update(sub_dcmp)
- 
+def compare_and_update_events(dcmp):
+    for name in dcmp.diff_files:
+        print("STREAM CHANGE -  %s - UPDATING" % (name))
+        if os.path.isdir(dcmp.left+"/"+name):
+            shutil.copytree(dcmp.left+"/"+name, dcmp.right+"/"+name, dirs_exist_ok=True)
+        elif os.path.isfile(dcmp.left+"/"+name):
+            shutil.copy2(dcmp.left+"/"+name, dcmp.right+"/"+name)
+    for name in dcmp.left_only:
+        if os.path.isdir(dcmp.left+"/"+name):
+            print("NEW STREAM DIRECTORY - %s - CREATING" % (name))
+            shutil.copytree(dcmp.left+"/"+name, dcmp.right+"/"+name, dirs_exist_ok=True)
+        elif os.path.isfile(dcmp.left+"/"+name):
+            print("NEW STREAM FILE - %s - CREATING" % (name))
+            shutil.copy2(dcmp.left+"/"+name, dcmp.right+"/"+name)
+    for name in dcmp.right_only:
+        if os.path.isfile(dcmp.right+"/"+name):
+            print("EVENT NO LONGER EXISTS - %s - DELETING" % (name))
+            os.remove(dcmp.right+"/"+name)
+    for sub_dcmp in dcmp.subdirs.values():
+        compare_and_update_events(sub_dcmp) 
