@@ -20,7 +20,7 @@ RUN bash -c 'mkdir -p ./m3u'
 
 COPY *.py ./
 
-VOLUME /movies /tv /logs
+VOLUME /movies /tv /events /logs
 
 COPY initialize_cron.sh /root/
 
