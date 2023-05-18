@@ -2,19 +2,28 @@
 printenv | sed 's/^\(.*\)$/export \1/g' > /root/project_env.sh
 chmod +x /root/project_env.sh
 touch /logs/cron.log
-if [ "$TVSHOWS" == "true" ]
+
+if [ "$All" == "true" ]
 then
-    cd /m3u2strm && python3 main.py $TVSHOWURL tv /tv/ $APOLLO
-    (crontab -l ; echo "$TVCRONMINUTE $TVCRONHOUR * * * . /root/project_env.sh; cd /m3u2strm && python3 main.py $TVSHOWURL tv /tv/ $APOLLO >> /logs/cron.log") | crontab
+    cd /m3u2strm && python3 main.py $ALLURL all $MOVIES $TVSHOWS $EVENTS /movies/ /tv/ /events/
+    (crontab -l ; echo "$CRONMINUTE $CRONHOUR * * * . /root/project_env.sh; cd /m3u2strm && python3 main.py $ALLURL all $MOVIES $TVSHOWS $EVENTS /movies/ /tv/ /events/ >> /logs/cron.log") | crontab
 fi
-if [ "$MOVIES" == "true" ]
+if  [ "$All" != "true" ]
 then
-    cd /m3u2strm && python3 main.py $MOVIEURL movies /movies/ $APOLLO
-    (crontab -l ; echo "$MOVIECRONMINUTE $MOVIECRONHOUR * * * . /root/project_env.sh; cd /m3u2strm && python3 main.py $MOVIEURL movies /movies/ $APOLLO >> /logs/cron.log") | crontab
-fi
-if [ "$EVENTS" == "true" ]
-then
-    cd /m3u2strm && python3 main.py $EVENTURL events /events/ $APOLLO
-    (crontab -l ; echo "$EVENTCRONMINUTE $EVENTCRONHOUR * * * . /root/project_env.sh; cd /m3u2strm && python3 main.py $EVENTURL events /events/ $APOLLO >> /logs/cron.log") | crontab
+    if [ "$TVSHOWS" == "true" ]
+    then
+        cd /m3u2strm && python3 main.py $TVSHOWURL tv $APOLLO /tv/
+        (crontab -l ; echo "$TVCRONMINUTE $TVCRONHOUR * * * . /root/project_env.sh; cd /m3u2strm && python3 main.py $TVSHOWURL tv $APOLLO /tv/ >> /logs/cron.log") | crontab
+    fi
+    if [ "$MOVIES" == "true" ]
+    then
+        cd /m3u2strm && python3 main.py $MOVIEURL movies $APOLLO /movies/
+        (crontab -l ; echo "$MOVIECRONMINUTE $MOVIECRONHOUR * * * . /root/project_env.sh; cd /m3u2strm && python3 main.py $MOVIEURL movies $APOLLO /movies/ >> /logs/cron.log") | crontab
+    fi
+    if [ "$EVENTS" == "true" ]
+    then
+        cd /m3u2strm && python3 main.py $EVENTURL events $APOLLO /events/
+        (crontab -l ; echo "$EVENTCRONMINUTE $EVENTCRONHOUR * * * . /root/project_env.sh; cd /m3u2strm && python3 main.py $EVENTURL events $APOLLO /events/ >> /logs/cron.log") | crontab
+    fi
 fi
 cron && tail -f /logs/cron.log

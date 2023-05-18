@@ -41,16 +41,7 @@ class Movie(object):
     return ('movies/' + self.title.replace(':','-').replace('*','_').replace('/','_').replace('?','') + ' - ' + self.year + "/" + ' - '.join(filestring) + ".strm")
   
   def makeStream(self):
-    filename = self.getFilename()
-    directories = filename.split('/')
-    directories = directories[:-1]
-    typedir = directories[0]
-    moviedir = '/'.join([typedir, directories[1]])
-    if not os.path.exists(typedir):
-      os.mkdir(typedir)
-    if not os.path.exists(moviedir):
-      os.mkdir(moviedir)
-    tools.makeStrm(filename, self.url)
+    tools.makeStrm(self.getFilename(), self.url)
 
 class Event(object):
   def __init__(self, title, url, eventtype, year=None, resolution=None, language=None):
@@ -62,22 +53,13 @@ class Event(object):
     self.language = language
 
   def getFilename(self):
-    filestring = [self.title.replace(':','-').replace('*','_').replace('/','_').replace('?','')]
+    filestring = [self.title.strip().replace(':','-').replace('*','_').replace('/','_').replace('?','').replace('|','-')]
     if self.resolution:
-      filestring.append(self.resolution)
-    return ('events/'+ self.eventtype + "/" + ' - '.join(filestring) + ".strm")
+      filestring.append(self.resolution.strip())
+    return ('events/'+ self.eventtype.strip().replace(':','-').replace('*','_').replace('/','_').replace('?','').replace('|','-') + "/" + ' - '.join(filestring) + ".strm")
   
   def makeStream(self):
-    filename = self.getFilename()
-    directories = filename.split('/')
-    directories = directories[:-1]
-    typedir = directories[0]
-    moviedir = '/'.join([typedir, directories[1]])
-    if not os.path.exists(typedir):
-      os.mkdir(typedir)
-    if not os.path.exists(moviedir):
-      os.mkdir(moviedir)
-    tools.makeStrm(filename, self.url)
+    tools.makeStrm(self.getFilename(), self.url)
 
 class TVEpisode(object):
   '''A class used to construct the TV filename.
@@ -134,20 +116,7 @@ class TVEpisode(object):
       return ('tvshows/' + self.showtitle.strip().replace(':','-').replace('/','_').replace('*','_').replace('?','') +"/" +' - '.join(filestring).replace(':','-').replace('*','_') + ".strm")
   
   def makeStream(self):
-    filename = self.getFilename()
-    directories = filename.split('/')
-    directories = directories[:-1]
-    typedir = directories[0]
-    showdir = '/'.join([typedir, directories[1]])
-    if not os.path.exists(typedir):
-      os.mkdir(typedir)
-    if not os.path.exists(showdir):
-      os.mkdir(showdir)
-    if len(directories) > 2:
-      seasondir = '/'.join([showdir, directories[2]])
-      if not os.path.exists(seasondir):
-        os.mkdir(seasondir)
-    tools.makeStrm(filename, self.url)
+    tools.makeStrm(self.getFilename(), self.url)
 
 class rawStreamList(object):
   def __init__(self, filename):
@@ -158,7 +127,7 @@ class rawStreamList(object):
     self.parseLine()
 
   def readLines(self):
-    self.lines = [line.rstrip('\n') for line in open(self.filename, encoding="ISO-8859-1")]
+    self.lines = [line.rstrip('\n') for line in open(self.filename, encoding="UTF-8")]
     return len(self.lines)
  
   def parseLine(self):
@@ -193,14 +162,24 @@ class rawStreamList(object):
         linenumber += 2
         #self.parseLine(linenumber)
 
-  def parseStreamType(self, streaminfo):
-    typematch = tools.tvgTypeMatch(streaminfo)
-    ufcwwematch = tools.ufcwweMatch(streaminfo)
+  def parseStreamType(self, streaminfo, streamURL):
+    moviematch = tools.urlMovieMatch(streamURL)
+    if moviematch:
+      return 'vodMovie'
+
+    seriesmatch = tools.urlSeriesMatch(streamURL)
+    if seriesmatch:
+      return 'vodTV'
+  
     eventmatch = tools.eventMatch(streaminfo)
     if eventmatch:
       return 'live'
+    
+    ufcwwematch = tools.ufcwweMatch(streaminfo)
     if ufcwwematch:
       return 'live'
+    
+    typematch = tools.tvgTypeMatch(streaminfo)    
     if typematch:
       streamtype = tools.getResult(typematch)
       if streamtype == 'tvshows':
@@ -210,13 +189,9 @@ class rawStreamList(object):
       if streamtype == 'live':
         return 'live'
     
-    tvshowmatch = tools.sxxExxMatch(streaminfo)
-    if tvshowmatch:
-      return 'vodTV'
-    
-    airdatematch = tools.airDateMatch(streaminfo)
-    if airdatematch:
-      return 'vodTV'
+    idmatch = tools.tvidmatch(streaminfo)
+    if idmatch:
+      return 'live'
 
     channelmatch = tools.tvgChannelMatch(streaminfo)
     if channelmatch:
@@ -225,6 +200,14 @@ class rawStreamList(object):
     logomatch = tools.tvgLogoMatch(streaminfo)
     if logomatch:
       return 'live'
+    
+    tvshowmatch = tools.sxxExxMatch(streaminfo)
+    if tvshowmatch:
+      return 'vodTV'
+    
+    airdatematch = tools.airDateMatch(streaminfo)
+    if airdatematch:
+      return 'vodTV'
 
     tvgnamematch = tools.tvgNameMatch(streaminfo)
     if tvgnamematch:
@@ -234,7 +217,7 @@ class rawStreamList(object):
 
 
   def parseStream(self, streaminfo, streamURL):
-    streamtype = self.parseStreamType(streaminfo)
+    streamtype = self.parseStreamType(streaminfo, streamURL)
     if streamtype == 'vodTV':
       self.parseVodTv(streaminfo, streamURL)
     elif streamtype == 'vodMovie':
@@ -252,7 +235,7 @@ class rawStreamList(object):
       resolution = tools.parseResolution(resolution)
       #print(resolution)
       title = tools.stripResolution(title)
-    episodeinfo = tools.parseEpisode(title)
+    episodeinfo = tools.parseEpisode(streaminfo)
     if episodeinfo:
       if len(episodeinfo) == 3:
         showtitle = episodeinfo[0]

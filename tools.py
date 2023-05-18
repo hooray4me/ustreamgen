@@ -133,6 +133,18 @@ def seasonMatch(line):
     return seasonnumber
   return
 
+def urlSeriesMatch(line):
+  seriesmatch = re.compile('series\/', re.IGNORECASE).search(line)
+  if seriesmatch:
+    return seriesmatch
+  return
+
+def urlMovieMatch(line):
+  seriesmatch = re.compile('movie\/', re.IGNORECASE).search(line)
+  if seriesmatch:
+    return seriesmatch
+  return
+
 def imdbCheck(line):
   imdbmatch = re.compile('[t][t][0-9][0-9][0-9]').search(line)
   if imdbmatch:
@@ -166,15 +178,19 @@ def parseResolution(match):
 def parseGroup(match):
   groupmatch = match.group().strip()
   groupparse = re.findall('group-title=\"(.*?)\"', groupmatch)
-  return groupparse[0]
+  return groupparse[0].replace('/','-')
 
 def makeStrm(filename, url):
-  if not os.path.exists(filename):
-    streamfile = open(filename, "w+")
-    streamfile.write(url)
-    streamfile.close
-    print("strm file created:", filename)
-    streamfile.close()
+  try:
+      path = os.path.dirname(filename)
+      os.makedirs(path, exist_ok=True)
+      streamfile = open(filename, "w+")
+      streamfile.write(url)
+      streamfile.close
+      print("strm file created:", filename)
+      streamfile.close()
+  except:
+    print ("Could not write:",filename)
 
 def makeDirectory(directory):
   if not os.path.exists(directory):
