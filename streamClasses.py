@@ -2,18 +2,8 @@ import logger
 import os
 import re
 import tools
-class Movie(object):
-  '''A class used to construct the Movie filename.
 
-  :param title: The Title of the Movie (required)
-  :type title: str.
-  :param url: The url to the location of the stream (required)
-  :type url: str.
-  :param year: The Year the movie was made (optional)
-  :type year: str.
-  :param resolution: The resolution of the stream (optional)
-  :type resolution: str.
-  '''
+class Movie(object):
   def __init__(self, title, url, year=None, resolution=None, language=None):
     self.title = title.strip()
     self.url = url
@@ -22,11 +12,6 @@ class Movie(object):
     self.language = language
 
   def getFilename(self):
-    '''Getter to get the filename for the stream file
-    
-    :returns: the fully constructed filename with type directory ea. "movies/The Longest Yard - 720p.strm"
-    :rtype: str
-    '''
     filestring = [self.title.replace(':','-').replace('*','_').replace('/','_').replace('?','')]
     if self.year:
       if self.year[0] == "(":
@@ -62,25 +47,6 @@ class Event(object):
     tools.makeStrm(self.getFilename(), self.url)
 
 class TVEpisode(object):
-  '''A class used to construct the TV filename.
-
-  :param showtitle: The Title of the TVshow (required)
-  :type showtitle: str.
-  :param url: The url to the location of the stream (required)
-  :type url: str.
-  :param seasonnumber: The season number of this episode. (optional)
-  :type seasonnumber: str
-  :param episodenumber: The episode number of this episode. (optional)
-  :type episodenumber: str
-  :param resolution: The resolution of the stream (optional)
-  :type resolution: str.
-  :param year: The Year the show was made (optional)
-  :type year: str.
-  :param episodename: The name of the episode. (optional)
-  :type episodename: str
-  :param airdate: The date the show aired, for daily or nightly shows like news (optional)
-  :type airdate: str
-  '''
   def __init__(self, showtitle, url, seasonnumber=None, episodenumber=None ,resolution=None, language=None, episodename=None, airdate=None):
     self.showtitle = showtitle
     self.episodenumber = episodenumber
@@ -94,11 +60,6 @@ class TVEpisode(object):
     self.sXXeXX = "S" + str(self.seasonnumber) + "E" + str(self.episodenumber)
 
   def getFilename(self):
-    '''Getter to get the filename for the stream file
-    
-    :returns: the fully constructed filename with type directory ea. "tvshows/Star Trek the Next Generation - Season 02/Star Trek the Next Generation - S02E07 - The Borgs kill Picard - 1080p.strm"
-    :rtype: str
-    '''
     filestring = [self.showtitle.replace(':','-').replace('*','_').replace('/','_').replace('?','')]
     if self.airdate:
       filestring.append(self.airdate.strip())
