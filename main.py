@@ -24,17 +24,17 @@ if funct == 'all':
     if events == 'true':
         eventsDestination = sys.argv[8]
 
-    listhandler.parseIPTVList(funct, providerurl, directory, moviesDestination, tvshowsDestination, eventsDestination)
+    listhandler.parseIPTVLists(funct, providerurl, directory, moviesDestination, tvshowsDestination, eventsDestination)
 
 else:
     apollo = sys.argv[3]
     path = sys.argv[4]
 
     if funct == 'movies' or apollo == 'false':
-        listhandler.parseIPTVList(funct, providerurl, directory, path)
+        listhandler.parseIPTVLists(funct, providerurl, directory, path)
     elif funct == 'tvshows':
-        listhandler.parseIPTVList(funct, providerurl, directory, None, path, None, 27)
+        listhandler.parseIPTVLists(funct, providerurl, directory, None, path, None, 27)
     elif funct == 'events':
-        listhandler.parseIPTVList(funct, providerurl, directory, None, None, path, 7)
+        listhandler.parseIPTVLists(funct, providerurl, directory, None, None, path, 7)
 
 
