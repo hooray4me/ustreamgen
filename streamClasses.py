@@ -235,7 +235,7 @@ class rawStreamList(object):
       resolution = tools.parseResolution(resolution)
       #print(resolution)
       title = tools.stripResolution(title)
-    episodeinfo = tools.parseEpisode(streaminfo)
+    episodeinfo = tools.parseEpisode(title)
     if episodeinfo:
       if len(episodeinfo) == 3:
         showtitle = episodeinfo[0]
@@ -249,9 +249,12 @@ class rawStreamList(object):
         episodenumber = episodeinfo[3]
         language = episodeinfo[4]
         episode = TVEpisode(showtitle, streamURL, seasonnumber=seasonnumber, episodenumber=episodenumber, resolution=resolution, language=language, episodename=episodename)
-    print(episode.__dict__, 'TVSHOW')
-    print(episode.getFilename())
-    episode.makeStream()
+      print(episode.__dict__, 'TVSHOW')
+      print(episode.getFilename())
+      episode.makeStream()
+    else:
+      print("NOT FOUND: ",streaminfo)
+   
   
   def parseLiveStream(self, streaminfo, streamURL):
     #print(streaminfo, "LIVETV")
