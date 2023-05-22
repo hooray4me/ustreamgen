@@ -133,4 +133,6 @@ test.py
 /movies
 /events
 iptv.m3u
+/.vscode
+/.vs
 
