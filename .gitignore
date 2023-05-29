@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.vscode/launch.json
+test.py
+/tvshows
+/movies
+/events
+iptv.m3u
+/.vscode
+/.vs
+

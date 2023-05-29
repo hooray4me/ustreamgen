@@ -133,6 +133,18 @@ def seasonMatch(line):
     return seasonnumber
   return
 
+def urlSeriesMatch(line):
+  seriesmatch = re.compile('series\/', re.IGNORECASE).search(line)
+  if seriesmatch:
+    return seriesmatch
+  return
+
+def urlMovieMatch(line):
+  seriesmatch = re.compile('movie\/', re.IGNORECASE).search(line)
+  if seriesmatch:
+    return seriesmatch
+  return
+
 def imdbCheck(line):
   imdbmatch = re.compile('[t][t][0-9][0-9][0-9]').search(line)
   if imdbmatch:
@@ -166,15 +178,19 @@ def parseResolution(match):
 def parseGroup(match):
   groupmatch = match.group().strip()
   groupparse = re.findall('group-title=\"(.*?)\"', groupmatch)
-  return groupparse[0]
+  return groupparse[0].replace('/','-')
 
 def makeStrm(filename, url):
-  if not os.path.exists(filename):
-    streamfile = open(filename, "w+")
-    streamfile.write(url)
-    streamfile.close
-    print("strm file created:", filename)
-    streamfile.close()
+  try:
+      path = os.path.dirname(filename)
+      os.makedirs(path, exist_ok=True)
+      streamfile = open(filename, "w+")
+      streamfile.write(url)
+      streamfile.close
+      print("strm file created:", filename)
+      streamfile.close()
+  except:
+    print ("Could not write:",filename)
 
 def makeDirectory(directory):
   if not os.path.exists(directory):
@@ -245,6 +261,7 @@ def parseEpisode(title):
       episodenumber = episodeMatch(title)
       showtitle = stripSxxExx(title)
     return [showtitle, episodetitle, seasonnumber, episodenumber, language]
+  
 def compare_and_update(dcmp):
     for name in dcmp.diff_files:
         print("STREAM CHANGE -  %s - UPDATING" % (name))
@@ -259,8 +276,16 @@ def compare_and_update(dcmp):
         elif os.path.isfile(dcmp.left+"/"+name):
             print("NEW STREAM FILE - %s - CREATING" % (name))
             shutil.copy2(dcmp.left+"/"+name, dcmp.right+"/"+name)
+    for name in dcmp.right_only:
+        if os.path.isdir(dcmp.right+"/"+name):
+          print("directory NO LONGER EXISTS - %s - DELETING" % (name))
+          shutil.rmtree(dcmp.right+"/"+name)
+        if os.path.isfile(dcmp.right+"/"+name):
+          print("file NO LONGER EXISTS - %s - DELETING" % (name))
+          os.remove(dcmp.right+"/"+name)
     for sub_dcmp in dcmp.subdirs.values():
         compare_and_update(sub_dcmp)
+
 def compare_and_update_events(dcmp):
     for name in dcmp.diff_files:
         print("STREAM CHANGE -  %s - UPDATING" % (name))
@@ -281,3 +306,9 @@ def compare_and_update_events(dcmp):
             os.remove(dcmp.right+"/"+name)
     for sub_dcmp in dcmp.subdirs.values():
         compare_and_update_events(sub_dcmp) 
+
+def printArray(args):
+    argcount =1
+    for arg in args:
+        print ('argument ',argcount,': ',arg)
+        argcount=argcount+1

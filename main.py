@@ -1,68 +1,40 @@
 #!/usr/bin/env python3
-import tools
-import streamClasses
-import wget
 import sys
 import os
-import shutil
-import filecmp
-
-providerurl = sys.argv[1]
-funct = sys.argv[2]
-path = sys.argv[3]
-apollo = sys.argv[4]
+import listhandler
 
 directory =  os.path.abspath(os.path.dirname(__file__))
+providerurl = sys.argv[1]
+funct = sys.argv[2]
 
-print('...Starting Download...')
-if funct == 'tv' and apollo == 'true':
-    for i in range(1,27):
-        url = providerurl  + str(i)
-        print(wget.download(url, ('m3u/tvshows-'+str(i)+'.m3u')))
-        apollolist = streamClasses.rawStreamList('m3u/tvshows-'+str(i)+'.m3u')
-        os.remove('m3u/tvshows-'+str(i)+'.m3u')
-    print('comparing destination ',path)
-    c = filecmp.dircmp(directory+'/tvshows', path)
-    tools.compare_and_update(c)
-    print('cleaning up temp space')
-    cleanup = shutil.rmtree('tvshows/')
-elif funct == 'events' and apollo == 'true':
-    urltype = 'events'
-    for i in range(1,7):
-        url = providerurl + urltype +'/' + str(i)
-        print(wget.download(url, ('m3u/apolloevents-'+str(i)+'.m3u')))
-        apollolist = streamClasses.rawStreamList('m3u/apolloevents-'+str(i)+'.m3u')
-        os.remove('m3u/apolloevents-'+str(i)+'.m3u')
-    print('comparing destination ',path)
-    c = filecmp.dircmp(directory+'/events', path)
-    tools.compare_and_update_events(c)
-    print('cleaning up temp space')
-    cleanup = shutil.rmtree('events/')
-elif funct == 'events' and apollo == 'false':
-    print(wget.download(providerurl, ('m3u/apolloevents.m3u')))
-    apollolist = streamClasses.rawStreamList('m3u/apolloevents.m3u')
-    os.remove('m3u/apolloevents.m3u')
-    print('comparing destination ',path)
-    c = filecmp.dircmp(directory+'/events', path)
-    tools.compare_and_update_events(c)
-    print('cleaning up temp space')
-    cleanup = shutil.rmtree('events/')
-elif funct == 'tv' and apollo == 'false':
-    print(wget.download(providerurl, ('m3u/tvshows.m3u')))
-    apollolist = streamClasses.rawStreamList('m3u/tvshows.m3u')
-    os.remove('m3u/tvshows.m3u')
-    print('comparing destination ',path)
-    c = filecmp.dircmp(directory+'/tvshows', path)
-    tools.compare_and_update(c)
-    print('cleaning up temp space')
-    cleanup = shutil.rmtree('tvshows/')
-elif funct == 'movies':
-    print(wget.download(providerurl, ('m3u/movies.m3u')))
-    apollolist = streamClasses.rawStreamList('m3u/movies.m3u')
-    os.remove('m3u/movies.m3u')
-    print('comparing destination ',path)
-    c = filecmp.dircmp(directory+'/movies', path)
-    tools.compare_and_update(c)
-    print('cleaning up temp space')
-    cleanup = shutil.rmtree('movies/')
-print('done')
+if funct == 'all':
+    movies = sys.argv[3]
+    tvshows = sys.argv[4]
+    events = sys.argv[5]
+
+    moviesDestination = None
+    if movies == 'true':
+        moviesDestination = sys.argv[6]
+
+    tvshowsDestination = None
+    if tvshows == 'true':
+        tvshowsDestination = sys.argv[7]
+
+    eventsDestination = None  
+    if events == 'true':
+        eventsDestination = sys.argv[8]
+
+    listhandler.parseIPTVLists(funct, providerurl, directory, moviesDestination, tvshowsDestination, eventsDestination)
+
+else:
+    apollo = sys.argv[3]
+    path = sys.argv[4]
+
+    if funct == 'movies' or apollo == 'false':
+        listhandler.parseIPTVLists(funct, providerurl, directory, path)
+    elif funct == 'tvshows':
+        listhandler.parseIPTVLists(funct, providerurl, directory, None, path, None, 27)
+    elif funct == 'events':
+        listhandler.parseIPTVLists(funct, providerurl, directory, None, None, path, 7)
+
+

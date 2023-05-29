@@ -26,9 +26,12 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+      - SINGLELIST=true #when true a single list of movies, series and events is used. flase for multiple lists
       - MOVIES=true #set to false if movies are not desired
       - TVSHOWS=true #set to false if tv shows are not desired
       - EVENTS=true # set to false is live sporting events are not desired
+      - CRONHOUR=0 #0-23 # sets the hour of the day the script will run again for all content in 1 list **ALL must be true
+      - CRONMINUTE=10 #0-59 # sets the minute of the day the script will run again for all content 1 list **ALL must be true
       - TVCRONHOUR=0 #0-23 # sets the hour of the day the script will run again for tv shows **TVSHOWS must be true
       - TVCRONMINUTE=10 #0-59 # sets the minute of the day the script will run again for tv shows **TVSHOWS must be true
       - MOVIECRONHOUR=0 #0-23 # sets the hour of the day the script will run again for movies **MOVIES must be true
@@ -36,6 +39,7 @@ services:
       - EVENTCRONHOUR=0 #0-23 # sets the hour of the day the script will run again for events **EVENTS must be true
       - EVENTCRONMINUTE=30 #0-59 # sets the minute of the day the script will run again for events **EVENTS must be true
       - TZ=America/Chicago
+      - SINGLELISTURL=https://tvnow.best/api/list/user/pass/m3u8/movies/ # Full M3U Provider URL for all content in one list **SINGLELIST must be true
       - MOVIEURL=https://tvnow.best/api/list/user/pass/m3u8/movies/ # Full M3U Provider URL for Movies **MOVIES must be true
       - TVSHOWURL=https://tvnow.best/api/list/user/pass/m3u8/tvshows/ # Full M3U Provider URL for TV Shows **TVSHOWS must be true
       - EVENTURL=https://tvnow.best/api/list/user/pass/m3u8/events/ # Full M3U Provider URL for Events **EVENTS must be true
@@ -67,6 +71,7 @@ docker run -d \
   -e TVSHOWURL=https://tvnow.best/api/list/user/pass/m3u8/tvshows/ \
   -e EVENTURL=https://tvnow.best/api/list/user/pass/m3u8/events/ \
   -e APOLLO=false \
+  -e SINGLELIST=false \
   -v /path/to/folder/for/tv/strm/files:/tv \
   -v /path/to/folder/for/movie/strm/files:/movies \
   -v /path/to/folder/for/events/strm/files:/events \
