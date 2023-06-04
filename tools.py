@@ -280,7 +280,7 @@ def compare_and_update(dcmp):
         if os.path.isdir(dcmp.right+"/"+name):
           print("directory NO LONGER EXISTS - %s - DELETING" % (name))
           shutil.rmtree(dcmp.right+"/"+name)
-        if os.path.isfile(dcmp.right+"/"+name):
+        if os.path.isfile(dcmp.right+"/"+name) and name.endswith(".strm"):
           print("file NO LONGER EXISTS - %s - DELETING" % (name))
           os.remove(dcmp.right+"/"+name)
     for sub_dcmp in dcmp.subdirs.values():
@@ -301,7 +301,7 @@ def compare_and_update_events(dcmp):
             print("NEW STREAM FILE - %s - CREATING" % (name))
             shutil.copy2(dcmp.left+"/"+name, dcmp.right+"/"+name)
     for name in dcmp.right_only:
-        if os.path.isfile(dcmp.right+"/"+name):
+        if os.path.isfile(dcmp.right+"/"+name) and name.endswith(".strm"):
             print("EVENT NO LONGER EXISTS - %s - DELETING" % (name))
             os.remove(dcmp.right+"/"+name)
     for sub_dcmp in dcmp.subdirs.values():
