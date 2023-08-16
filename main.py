@@ -33,7 +33,7 @@ else:
     if funct == 'movies' or apollo == 'false':
         listhandler.parseIPTVLists(funct, providerurl, directory, path)
     elif funct == 'tvshows':
-        listhandler.parseIPTVLists(funct, providerurl, directory, None, path, None, 27)
+        listhandler.parseIPTVLists(funct, providerurl, directory, None, path, None, 24)
     elif funct == 'events':
         listhandler.parseIPTVLists(funct, providerurl, directory, None, None, path, 7)
 
