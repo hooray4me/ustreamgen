@@ -267,19 +267,19 @@ def compare_and_update(dcmp, uid, gid):
         print("STREAM CHANGE -  %s - UPDATING" % (name))
         if os.path.isdir(dcmp.left+"/"+name):
             shutil.copytree(dcmp.left+"/"+name, dcmp.right+"/"+name, dirs_exist_ok=True)
-            os.chown(dcmp.left+"/"+name, dcmp.right+"/"+name, uid, gid)
+            os.chown(dcmp.right+"/"+name, uid, gid)
         elif os.path.isfile(dcmp.left+"/"+name):
             shutil.copy2(dcmp.left+"/"+name, dcmp.right+"/"+name)
-            os.chown(dcmp.left+"/"+name, dcmp.right+"/"+name, uid, gid)
+            os.chown(dcmp.right+"/"+name, uid, gid)
     for name in dcmp.left_only:
         if os.path.isdir(dcmp.left+"/"+name):
             print("NEW STREAM DIRECTORY - %s - CREATING" % (name))
-            shutil.copytree(dcmp.left+"/"+name, dcmp.right+"/"+name, dirs_exist_ok=True)
-            os.chown(dcmp.left+"/"+name, dcmp.right+"/"+name, uid, gid)
+            shutil.copytree(dcmp.right+"/"+name, dirs_exist_ok=True)
+            os.chown(dcmp.right+"/"+name, uid, gid)
         elif os.path.isfile(dcmp.left+"/"+name):
             print("NEW STREAM FILE - %s - CREATING" % (name))
             shutil.copy2(dcmp.left+"/"+name, dcmp.right+"/"+name)
-            os.chown(dcmp.left+"/"+name, dcmp.right+"/"+name, uid, gid)
+            os.chown(dcmp.right+"/"+name, uid, gid)
     for name in dcmp.right_only:
         if os.path.isdir(dcmp.right+"/"+name):
           print("directory NO LONGER EXISTS - %s - DELETING" % (name))
@@ -295,19 +295,19 @@ def compare_and_update_events(dcmp, uid, gid):
         print("STREAM CHANGE -  %s - UPDATING" % (name))
         if os.path.isdir(dcmp.left+"/"+name):
             shutil.copytree(dcmp.left+"/"+name, dcmp.right+"/"+name, dirs_exist_ok=True)
-            os.chown(dcmp.left+"/"+name, dcmp.right+"/"+name, uid, gid)
+            os.chown(dcmp.right+"/"+name, uid, gid)
         elif os.path.isfile(dcmp.left+"/"+name):
             shutil.copy2(dcmp.left+"/"+name, dcmp.right+"/"+name)
-            os.chown(dcmp.left+"/"+name, dcmp.right+"/"+name, uid, gid)
+            os.chown(dcmp.right+"/"+name, uid, gid)
     for name in dcmp.left_only:
         if os.path.isdir(dcmp.left+"/"+name):
             print("NEW STREAM DIRECTORY - %s - CREATING" % (name))
             shutil.copytree(dcmp.left+"/"+name, dcmp.right+"/"+name, dirs_exist_ok=True)
-            os.chown(dcmp.left+"/"+name, dcmp.right+"/"+name, uid, gid)
+            os.chown(dcmp.right+"/"+name, uid, gid)
         elif os.path.isfile(dcmp.left+"/"+name):
             print("NEW STREAM FILE - %s - CREATING" % (name))
             shutil.copy2(dcmp.left+"/"+name, dcmp.right+"/"+name)
-            os.chown(dcmp.left+"/"+name, dcmp.right+"/"+name, uid, gid)
+            os.chown(dcmp.right+"/"+name, uid, gid)
     for name in dcmp.right_only:
         if os.path.isfile(dcmp.right+"/"+name) and name.endswith(".strm"):
             print("EVENT NO LONGER EXISTS - %s - DELETING" % (name))
