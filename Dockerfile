@@ -25,6 +25,12 @@ ENV TVSHOWURL=''
 ENV MOVIEURL=''
 ENV EVENTURL=''
 
+RUN apt-get update
+
+RUN su -
+
+RUN apt-get install sudo -y
+
 RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
 RUN useradd ${UNAME} -u ${UID} -g ${GID} -m -s /bin/bash
@@ -35,7 +41,7 @@ RUN echo "${UNAME}  ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER ${UID}:${GID}
 
-RUN sudo apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
+RUN sudo apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
  sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
