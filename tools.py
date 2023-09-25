@@ -288,7 +288,7 @@ def compare_and_update(dcmp, uid, gid):
           print("file NO LONGER EXISTS - %s - DELETING" % (name))
           os.remove(dcmp.right+"/"+name)
     for sub_dcmp in dcmp.subdirs.values():
-        compare_and_update(sub_dcmp)
+        compare_and_update(sub_dcmp, uid, gid)
 
 def compare_and_update_events(dcmp, uid, gid):
     for name in dcmp.diff_files:
@@ -313,7 +313,7 @@ def compare_and_update_events(dcmp, uid, gid):
             print("EVENT NO LONGER EXISTS - %s - DELETING" % (name))
             os.remove(dcmp.right+"/"+name)
     for sub_dcmp in dcmp.subdirs.values():
-        compare_and_update_events(sub_dcmp) 
+        compare_and_update_events(sub_dcmp, uid, gid) 
 
 def printArray(args):
     argcount =1
