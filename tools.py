@@ -274,7 +274,7 @@ def compare_and_update(dcmp, uid, gid):
     for name in dcmp.left_only:
         if os.path.isdir(dcmp.left+"/"+name):
             print("NEW STREAM DIRECTORY - %s - CREATING" % (name))
-            shutil.copytree(dcmp.right+"/"+name, dirs_exist_ok=True)
+            shutil.copytree(dcmp.left+"/"+name, dcmp.right+"/"+name, dirs_exist_ok=True)
             os.chown(dcmp.right+"/"+name, uid, gid)
         elif os.path.isfile(dcmp.left+"/"+name):
             print("NEW STREAM FILE - %s - CREATING" % (name))
