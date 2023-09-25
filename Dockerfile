@@ -63,6 +63,8 @@ COPY initialize_cron.sh /root/
 
 RUN sudo chmod +x /root/initialize_cron.sh
 
+RUN sudo chown ${UID}:${GID} /root/initialize_cron.sh
+
 RUN crontab
 
 RUN (crontab -l) | crontab

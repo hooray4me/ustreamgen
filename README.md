@@ -23,6 +23,7 @@ services:
     image: hooray4rob/ustreamgen:latest
     container_name: ustreamgen
     command: /root/initialize_cron.sh
+    user: 1024:100
     environment:
       - UID=1024
       - GID=100
