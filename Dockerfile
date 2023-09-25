@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install --install-recommends -y apt-utils cron pyt
  apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN getent group $GROUP || groupadd -g $GID $GROUP
 RUN id -u $USER &>/dev/null || useradd $USER -u $UID -g $GID -m -s /bin/bash
-RUN echo $USER:$PASS | chpasswd
+RUN echo "$USER:$PASS" | chpasswd
 USER $USER
 WORKDIR /usr/src/app
 
