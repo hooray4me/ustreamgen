@@ -29,7 +29,7 @@ RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
 RUN id -u $USER &>/dev/null || useradd ${UNAME} -m -u ${UID} -g ${GID} -o -s /bin/bash ${UNAME}
 
-RUN echo '${UNAME}  ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN echo "${UNAME}  ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER ${UID}:${GID}
 
