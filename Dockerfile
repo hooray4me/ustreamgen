@@ -23,7 +23,7 @@ ENV TVSHOWURL=''
 ENV MOVIEURL=''
 ENV EVENTURL=''
 
-RUN groupadd -g $GID $GROUP && useradd $USER -u $UID -g $GID -m -s /bin/bash
+RUN groupadd -g $GID $GROUP && id -u $USER &>/dev/null || useradd $USER -u $UID -g $GID -m -s /bin/bash
 
 USER $USER
 
