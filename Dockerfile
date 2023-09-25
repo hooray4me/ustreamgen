@@ -51,6 +51,8 @@ RUN sudo pip install --no-cache-dir --upgrade pip \
 
 WORKDIR /m3u2strm
 
+RUN sudo chmod 777 /m3u2strm
+
 RUN bash -c 'mkdir -p ./m3u'
 
 COPY *.py ./
