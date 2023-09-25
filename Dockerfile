@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 ARG UID=1024
 ARG GID=100
 ARG USER=admin
-ARG PASS="some password"
+ARG PASS=Some-password
 ARG GROUP=users
 ARG DEBIAN_FRONTEND=noninteractive
 ENV APOLLO=false
@@ -27,8 +27,8 @@ ENV EVENTURL=''
 RUN apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
  apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN getent group $GROUP || groupadd -g $GID $GROUP
-RUN id -u $USER &>/dev/null || useradd $USER -u $UID -g $GID -m -s /bin/bash
-RUN echo "$USER:$PASS" | chpasswd
+RUN id -u $USER &>/dev/null || useradd $USER -u $UID -g $GID -m -s /bin/bash -p "$(openssl passwd -1 ubuntu)"
+
 USER $USER
 WORKDIR /usr/src/app
 
