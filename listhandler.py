@@ -5,17 +5,17 @@ import os
 import shutil
 import filecmp
 
-def parseIPTVLists( type, url, localdir, moviesDestination=None, tvShowsDestination=None, eventsDestination=None, endrange=None):
+def parseIPTVLists( type, url, localdir, moviesDestination=None, tvShowsDestination=None, eventsDestination=None, endrange=None, uid=None, gid=None):
     downloadAndParseLists(type, url, endrange)
 
     if moviesDestination is not None:
-        moveToDestination(localdir,'movies',moviesDestination)
+        moveToDestination(localdir,'movies',moviesDestination, uid, gid)
 
     if tvShowsDestination is not None: 
-        moveToDestination(localdir,'tvshows',tvShowsDestination)
+        moveToDestination(localdir,'tvshows',tvShowsDestination, uid, gid)
 
     if eventsDestination is not None:   
-        moveToDestination(localdir,'events',eventsDestination)
+        moveToDestination(localdir,'events',eventsDestination, uid, gid)
 
     #clean up fir single list, but 1 skipped destionation, for multiple skipped it's better to use multiple lists
     if moviesDestination  is None and tvShowsDestination is not None and eventsDestination is not None:
@@ -40,10 +40,10 @@ def downloadAndParseList( url, filename):
         streamClasses.rawStreamList('m3u/' + filename + '.m3u')
         os.remove('m3u/' + filename + '.m3u')
 
-def moveToDestination(localdir, localfolder, destination):
+def moveToDestination(localdir, localfolder, destination, uid, gid):
     print('comparing destination ',destination)
     c = filecmp.dircmp(localdir + '/' + localfolder, destination)
-    tools.compare_and_update(c)
+    tools.compare_and_update(c, uid, gid)
     cleanTempDirectory(localdir, localfolder)
 
 def cleanTempDirectory(localdir,localfolder):

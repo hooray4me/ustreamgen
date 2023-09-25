@@ -25,10 +25,10 @@ services:
     command: /root/initialize_cron.sh
     user: 1024:100
     environment:
-      - UID=1024
-      - GID=100
-      - UNAME=admin
-      - GROUP=users
+      - UID=1024 #UID for file ownership
+      - GID=100 #GID for file ownership
+      - UNAME=admin #Username for file ownership
+      - GROUP=users $ #Group name for file ownership
       - SINGLELIST=true #when true a single list of movies, series and events is used. flase for multiple lists
       - MOVIES=true #set to false if movies are not desired
       - TVSHOWS=true #set to false if tv shows are not desired
