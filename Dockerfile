@@ -37,8 +37,6 @@ RUN usermod -aG sudo ${UNAME}
 
 RUN echo "${UNAME}  ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-USER ${UID}:${GID}
-
 RUN sudo apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
  sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
 
@@ -62,8 +60,6 @@ VOLUME /movies /tv /events /logs
 COPY initialize_cron.sh /root/
 
 RUN sudo chmod +x /root/initialize_cron.sh
-
-RUN sudo chown ${UID}:${GID} /root/initialize_cron.sh
 
 RUN crontab
 
