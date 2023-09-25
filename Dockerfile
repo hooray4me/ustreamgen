@@ -33,7 +33,7 @@ RUN apt-get install sudo -y
 
 RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
-RUN id -u ${UNAME} &>/dev/null || useradd ${UNAME} -u ${UID} -g ${GID} -m -s /bin/bash
+RUN useradd ${UNAME} -u ${UID} -g ${GID} -m -s /bin/bash || echo "user already exists"
 
 RUN usermod -aG sudo ${UNAME}
 
