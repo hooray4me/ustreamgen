@@ -26,7 +26,7 @@ services:
     environment:
       - UID=1024
       - GID=100
-      - USER=admin
+      - UNAME=admin
       - GROUP=users
       - SINGLELIST=true #when true a single list of movies, series and events is used. flase for multiple lists
       - MOVIES=true #set to false if movies are not desired
