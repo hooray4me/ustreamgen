@@ -27,7 +27,8 @@ ENV EVENTURL=''
 
 RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
-RUN id -u $USER &>/dev/null || useradd -m -u ${UID} -g ${GID} -o -s /bin/bash ${UNAME}
+RUN id -u $USER &>/dev/null || useradd ${UNAME} -m -u ${UID} -g ${GID} -o -s /bin/bash ${UNAME} && adduser ${UNAME} sudo
+RUN echo '${UNAME}  ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER ${UID}:${GID}
 
