@@ -23,13 +23,11 @@ ENV TVSHOWURL=''
 ENV MOVIEURL=''
 ENV EVENTURL=''
 
-RUN groupadd -g $GID $GROUP && id -u $USER &>/dev/null || useradd $USER -u $UID -g $GID -m -s /bin/bash
-
-USER $USER
+RUN getent group $GROUP || groupadd -g $GID $GROUP && id -u $USER &>/dev/null || useradd $USER -u $UID -g $GID -m -s /bin/bash
 
 RUN apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
  apt-get clean && rm -rf /var/lib/apt/lists/*
-
+USER $USER
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
