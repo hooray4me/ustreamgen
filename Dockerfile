@@ -27,7 +27,7 @@ ENV EVENTURL=''
 
 RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
-RUN useradd ${UNAME} -m -u ${UID} -g ${GID} -o -s /bin/bash ${UNAME}
+RUN useradd ${UNAME} -u ${UID} -g ${GID} -m -s /bin/bash
 
 RUN usermod -aG sudo ${UNAME}
 
