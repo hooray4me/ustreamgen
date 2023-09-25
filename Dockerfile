@@ -33,7 +33,7 @@ RUN apt-get install sudo -y
 
 RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
-RUN useradd ${UNAME} -u ${UID} -g ${GID} -m -s /bin/bash
+RUN id -u ${UNAME} &>/dev/null || useradd ${UNAME} -u ${UID} -g ${GID} -m -s /bin/bash
 
 RUN usermod -aG sudo ${UNAME}
 
@@ -61,7 +61,7 @@ VOLUME /movies /tv /events /logs
 
 COPY initialize_cron.sh /root/
 
-RUN chmod +x /root/initialize_cron.sh
+RUN sudo chmod +x /root/initialize_cron.sh
 
 RUN crontab
 
