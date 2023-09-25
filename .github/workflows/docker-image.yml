@@ -7,11 +7,9 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
+    permissions: write-all
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -24,14 +22,38 @@ jobs:
       with:
         username: ${{secrets.DOCKER_USER}}
         password: ${{secrets.DOCKER_PASSWORD}}
+
     - name: Build Revision
       run: docker build . --tag hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
+
     - name: Push Revision
       run: docker push hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
+
     - name: Tag latest
       run: docker tag hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }} hooray4rob/ustreamgen:latest
+
     - name: Push latest
       run: docker push hooray4rob/ustreamgen:latest
+
+    - name: Tag Revision for github
+      run: docker tag hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }} ghcr.io/hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
+
+    - name: Tag Latest for github
+      run: docker tag hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }} ghcr.io/hooray4rob/ustreamgen:latest
+    - name: Login to github
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        logout: false
+
+    - name: Push Revision to github
+      run: docker push ghcr.io/hooray4rob/ustreamgen:v${{ secrets.MAJOR }}.${{ secrets.MINOR }}
+
+    - name: Push Latest to github
+      run: docker push ghcr.io/hooray4rob/ustreamgen:latest
+
     - name: Update Minor Version
       uses: hmanzur/actions-set-secret@v2.0.0
       with:
