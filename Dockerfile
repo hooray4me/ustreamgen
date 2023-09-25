@@ -37,19 +37,19 @@ RUN usermod -aG sudo ${UNAME}
 
 RUN echo "${UNAME}  ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-RUN sudo apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
- sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
+RUN apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
+ apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
 
-RUN sudo pip install --no-cache-dir --upgrade pip \
+RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
 WORKDIR /m3u2strm
 
-RUN sudo chmod 777 /m3u2strm
+RUN chmod 777 /m3u2strm
 
 RUN bash -c 'mkdir -p ./m3u'
 
@@ -59,7 +59,7 @@ VOLUME /movies /tv /events /logs
 
 COPY initialize_cron.sh /root/
 
-RUN sudo chmod +x /root/initialize_cron.sh
+RUN chmod +x /root/initialize_cron.sh
 
 RUN crontab
 
