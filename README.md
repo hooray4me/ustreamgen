@@ -24,8 +24,10 @@ services:
     container_name: ustreamgen
     command: /root/initialize_cron.sh
     environment:
-      - PUID=1000
-      - PGID=1000
+      - UID=1024
+      - GID=100
+      - USER=admin
+      - GROUP=users
       - SINGLELIST=true #when true a single list of movies, series and events is used. flase for multiple lists
       - MOVIES=true #set to false if movies are not desired
       - TVSHOWS=true #set to false if tv shows are not desired
