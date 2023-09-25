@@ -29,18 +29,20 @@ RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
 RUN id -u $USER &>/dev/null || useradd ${UNAME} -m -u ${UID} -g ${GID} -o -s /bin/bash ${UNAME}
 
+RUN usermod -aG sudo ${UNAME}
+
 RUN echo "${UNAME}  ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER ${UID}:${GID}
 
-RUN apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
+RUN sudo apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
  apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
 
-RUN pip install --no-cache-dir --upgrade pip \
+RUN sudo pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
 WORKDIR /m3u2strm
