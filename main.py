@@ -33,7 +33,13 @@ else:
     uid = sys.argv[5]
     gid = sys.argv[6]
 
-    if funct == 'movies' or apollo == 'false':
+    if funct == 'multipletvshows':
+        providerlist = sys.argv[1]
+        listhandler.parseIPTVLists(funct, providerurl, directory, None, path, int(uid), int(gid))
+    if funct == 'multiplemovies':
+        providerlist = sys.argv[1]
+        listhandler.parseIPTVLists(funct, providerurl, directory, path, None ,int(uid), int(gid))
+    elif funct == 'movies' or apollo == 'false':
         listhandler.parseIPTVLists(funct, providerurl, directory, path, None, None, None ,int(uid), int(gid))
     elif funct == 'tvshows':
         listhandler.parseIPTVLists(funct, providerurl, directory, None, path, None, 24, int(uid), int(gid))

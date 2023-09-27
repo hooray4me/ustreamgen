@@ -22,6 +22,10 @@ ENV SINGLELISTURL=''
 ENV TVSHOWURL=''
 ENV MOVIEURL=''
 ENV EVENTURL=''
+ENV MULTIPLETVPROVIDERS=false
+ENV MULTIPLEMOVIEPROVIDERS=false
+ENV TVPROVIDERS=/m3u2strm/tvproviders.txt
+ENV MOVIEPROVIDERS=/m3u2strm/movieproviders.txt
 
 RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
@@ -42,6 +46,8 @@ WORKDIR /m3u2strm
 RUN bash -c 'mkdir -p ./m3u'
 
 COPY *.py ./
+
+COPY *providers.txt ./
 
 VOLUME /movies /tv /events /logs
 

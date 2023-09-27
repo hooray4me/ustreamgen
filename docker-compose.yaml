@@ -5,6 +5,9 @@ services:
     container_name: ustreamgen
     command: /root/initialize_cron.sh
     env_file: .env
+    environment:
+      - TVPROVIDERS=$(<./tvproviders.txt)
+      - MOVIEPROVIDERS=$(<./movieproviders.txt)
     volumes:
       - /local/path/to/tv/shows:/tv
       - /local/path/to/movies:/movies
