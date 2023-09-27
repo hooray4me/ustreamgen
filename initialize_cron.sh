@@ -12,50 +12,50 @@ crontab -r
 #create cron rule(s)
 if [ "$SINGLELIST" == "true" ]
 then
-    cd /m3u2strm && python3 main.py $SINGLELISTURL all $MOVIES $TVSHOWS $EVENTS /movies/ /tv/ /events/ $UID $GID
+   touch /logs/cron-singlelist.log && cd /m3u2strm && python3 main.py $SINGLELISTURL all $MOVIES $TVSHOWS $EVENTS /movies/ /tv/ /events/ $UID $GID
     if [ -z "$CRON" ]
     then
         # CRON variable empty, use the hour minute
-        (crontab -l ; echo "$CRONMINUTE $CRONHOUR * * * cd /m3u2strm && python3 main.py $SINGLELISTURL all $MOVIES $TVSHOWS $EVENTS /movies/ /tv/ /events/ $UID $GID >> /logs/cron.log") | crontab
+        (crontab -l ; echo "$CRONMINUTE $CRONHOUR * * * cd /m3u2strm && python3 main.py $SINGLELISTURL all $MOVIES $TVSHOWS $EVENTS /movies/ /tv/ /events/ $UID $GID >> /logs/cron-singlelist.log") | crontab
     else
         # Use FULL CRON, so you can shedule like you want
-        (crontab -l ; echo "$CRON cd /m3u2strm && python3 main.py $SINGLELISTURL all $MOVIES $TVSHOWS $EVENTS /movies/ /tv/ /events/ $UID $GID >> /logs/cron.log") | crontab
+        (crontab -l ; echo "$CRON cd /m3u2strm && python3 main.py $SINGLELISTURL all $MOVIES $TVSHOWS $EVENTS /movies/ /tv/ /events/ $UID $GID >> /logs/cron-singlelist.log") | crontab
     fi
 else
     if [ "$TVSHOWS" == "true" ]
     then 
-        cd /m3u2strm && python3 main.py $TVSHOWURL tvshows $APOLLO /tv/ $UID $GID
+        touch /logs/cron-tvshows.log && cd /m3u2strm && python3 main.py $TVSHOWURL tvshows $APOLLO /tv/ $UID $GID
         if [ -z "$TVCRON" ]
         then
             # CRON variable empty, use the hour minute
-            (crontab -l ; echo "$TVCRONMINUTE $TVCRONHOUR * * * cd /m3u2strm && python3 main.py $TVSHOWURL tvshows $APOLLO /tv/ $UID $GID >> /logs/cron.log") | crontab
+            (crontab -l ; echo "$TVCRONMINUTE $TVCRONHOUR * * * cd /m3u2strm && python3 main.py $TVSHOWURL tvshows $APOLLO /tv/ $UID $GID >> /logs/cron-tvshows.log") | crontab
         else
             # Use FULL CRON, so you can shedule like you want
-            (crontab -l ; echo "$TVCRON cd /m3u2strm && python3 main.py $TVSHOWURL tvshows $APOLLO /tv/ $UID $GID >> /logs/cron.log") | crontab
+            (crontab -l ; echo "$TVCRON cd /m3u2strm && python3 main.py $TVSHOWURL tvshows $APOLLO /tv/ $UID $GID >> /logs/cron-tvshows.log") | crontab
         fi
     fi
     if [ "$MOVIES" == "true" ]
     then
-        cd /m3u2strm && python3 main.py $MOVIEURL movies $APOLLO /movies/ $UID $GID
+        touch /logs/cron-movies.log && cd /m3u2strm && python3 main.py $MOVIEURL movies $APOLLO /movies/ $UID $GID
         if [ -z "$MOVIECRON" ]
         then
             # CRON variable empty, use the hour minute
-            (crontab -l ; echo "$MOVIECRONMINUTE $MOVIECRONHOUR * * * cd /m3u2strm && python3 main.py $MOVIEURL movies $APOLLO /movies/ $UID $GID >> /logs/cron.log") | crontab
+            (crontab -l ; echo "$MOVIECRONMINUTE $MOVIECRONHOUR * * * cd /m3u2strm && python3 main.py $MOVIEURL movies $APOLLO /movies/ $UID $GID >> /logs/cron-movies.log") | crontab
         else
             # Use FULL CRON, so you can shedule like you want
-            (crontab -l ; echo "$MOVIECRON cd /m3u2strm && python3 main.py $MOVIEURL movies $APOLLO /movies/ $UID $GID >> /logs/cron.log") | crontab
+            (crontab -l ; echo "$MOVIECRON cd /m3u2strm && python3 main.py $MOVIEURL movies $APOLLO /movies/ $UID $GID >> /logs/cron-movies.log") | crontab
         fi
     fi
     if [ "$EVENTS" == "true" ]
     then
-        cd /m3u2strm && python3 main.py $EVENTURL events $APOLLO /events/ $UID $GID
+        touch /logs/cron-events.log && cd /m3u2strm && python3 main.py $EVENTURL events $APOLLO /events/ $UID $GID
         if [ -z "$EVENTCRON" ]
         then
             # CRON variable empty, use the hour minute
-            (crontab -l ; echo "$EVENTCRONMINUTE $EVENTCRONHOUR * * * cd /m3u2strm && python3 main.py $EVENTURL events $APOLLO /events/ $UID $GID >> /logs/cron.log") | crontab
+            (crontab -l ; echo "$EVENTCRONMINUTE $EVENTCRONHOUR * * * cd /m3u2strm && python3 main.py $EVENTURL events $APOLLO /events/ $UID $GID >> /logs/cron-events.log") | crontab
         else
             # Use FULL CRON, so you can shedule like you want
-            (crontab -l ; echo "$EVENTCRON cd /m3u2strm && python3 main.py $EVENTURL events $APOLLO /events/ $UID $GID >> /logs/cron.log") | crontab
+            (crontab -l ; echo "$EVENTCRON cd /m3u2strm && python3 main.py $EVENTURL events $APOLLO /events/ $UID $GID >> /logs/cron-events.log") | crontab
         fi
     fi
 fi
