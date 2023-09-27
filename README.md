@@ -20,7 +20,7 @@ docker-compose:
 version: "3"
 services:
   streamgen:
-    image: hooray4rob/ustreamgen:latest
+    image: ghcr.io/hooray4me/ustreamgen:v1.34
     container_name: ustreamgen
     command: /root/initialize_cron.sh
     user: 1024:100
