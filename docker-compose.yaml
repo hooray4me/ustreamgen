@@ -1,0 +1,13 @@
+version: "3"
+services:
+  streamgen:
+    image: ghcr.io/hooray4me/ustreamgen:latest
+    container_name: ustreamgen
+    command: /root/initialize_cron.sh
+    env_file: .env
+    volumes:
+      - /local/path/to/tv/shows:/tv
+      - /local/path/to/movies:/movies
+      - /local/path/to/event:/events
+      - ./logs:/logs
+    restart: unless-stopped

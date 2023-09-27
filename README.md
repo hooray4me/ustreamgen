@@ -15,70 +15,60 @@ Make sure you have the **correct** tv, movie events paths...
 
 > The example below creates a job that pulls new tv shows at 12:10am, new movies at 12:20am  and new events at 12:30am in the timezone specified.
 
+Create a **.env** file in the same folder you will run the container from.
+
+```
+TZ=America/Chicago #Optional timezone.
+PUID=1024 #Optional UserID of the account that will run the service
+PGID=100 #Optional GroupID of the account that will run the service
+UID=1024 #Optional UserID for file permissions. Default: 1000
+GID=100 #Optional GroupID for file permissions. Default: 1000
+UNAME=admin #Optional name of UID. If used MUST match id of UID. Default: root
+GROUP=users #Optional name of GID. If used MUST match id of GID. Default: root
+SINGLELIST=false #A single list is used for all movies, tv shows and events. Default: false
+SINGLELISTURL=https://tvnow.best/api/list/user/pass/m3u8/movies/ #Full M3U Provider URL for all content in one list **SINGLELIST must be true
+CRONHOUR=0 #0-23 # sets the hour of the day the script will run again for all content in 1 list **SINGLELIST must be true
+CRONMINUTE=10 #0-59 # sets the minute of the day the script will run again for all content 1 list **SINGLELIST must be true
+MOVIES=true #A seperate list is used for movies. Default: false
+MOVIEURL=https://tvnow.best/api/list/USER/PASS/m3u8/movies/ #Full M3U Provider URL for Movies **MOVIES must be true
+MOVIECRONHOUR=0 #0-23 # sets the hour of the day the script will run again for movies **MOVIES must be true
+MOVIECRONMINUTE=20 #0-59 # sets the minute of the day the script will run again for movies **MOVIES must be true
+TVSHOWS=true #A seperate list is used for tv shows. Default: true
+TVSHOWURL=https://tvnow.best/api/list/USER/PASS/m3u8/tvshows/ # Full M3U Provider URL for TV Shows **TVSHOWS must be true
+TVCRONHOUR=0 #0-23 # sets the hour of the day the script will run again for tv shows **TVSHOWS must be true
+TVCRONMINUTE=10 #0-59 # sets the minute of the day the script will run again for tv shows **TVSHOWS must be true
+EVENTS=false #A seperate list is used for events. Default: false
+EVENTURL=https://tvnow.best/api/list/user/pass/m3u8/events/ #Full M3U Provider URL for Events **EVENTS must be true
+EVENTCRONHOUR=0 #0-23 # sets the hour of the day the script will run again for events **EVENTS must be true
+EVENTCRONMINUTE=30 #0-59 # sets the minute of the day the script will run again for events **EVENTS must be true
+APOLLO=true #Optional change to true if your Provider is Apollo. Default: false
+```
 docker-compose:
 ```yaml
 version: "3"
 services:
   streamgen:
-    image: ghcr.io/hooray4me/ustreamgen:v1.34
+    image: ghcr.io/hooray4me/ustreamgen:latest
     container_name: ustreamgen
     command: /root/initialize_cron.sh
-    user: 1024:100
-    environment:
-      - UID=1024 #UID for file ownership
-      - GID=100 #GID for file ownership
-      - UNAME=admin #Username for file ownership
-      - GROUP=users $ #Group name for file ownership
-      - SINGLELIST=true #when true a single list of movies, series and events is used. flase for multiple lists
-      - MOVIES=true #set to false if movies are not desired
-      - TVSHOWS=true #set to false if tv shows are not desired
-      - EVENTS=true # set to false is live sporting events are not desired
-      - CRONHOUR=0 #0-23 # sets the hour of the day the script will run again for all content in 1 list **ALL must be true
-      - CRONMINUTE=10 #0-59 # sets the minute of the day the script will run again for all content 1 list **ALL must be true
-      - TVCRONHOUR=0 #0-23 # sets the hour of the day the script will run again for tv shows **TVSHOWS must be true
-      - TVCRONMINUTE=10 #0-59 # sets the minute of the day the script will run again for tv shows **TVSHOWS must be true
-      - MOVIECRONHOUR=0 #0-23 # sets the hour of the day the script will run again for movies **MOVIES must be true
-      - MOVIECRONMINUTE=20 #0-59 # sets the minute of the day the script will run again for movies **MOVIES must be true
-      - EVENTCRONHOUR=0 #0-23 # sets the hour of the day the script will run again for events **EVENTS must be true
-      - EVENTCRONMINUTE=30 #0-59 # sets the minute of the day the script will run again for events **EVENTS must be true
-      - TZ=America/Chicago
-      - SINGLELISTURL=https://tvnow.best/api/list/user/pass/m3u8/movies/ # Full M3U Provider URL for all content in one list **SINGLELIST must be true
-      - MOVIEURL=https://tvnow.best/api/list/user/pass/m3u8/movies/ # Full M3U Provider URL for Movies **MOVIES must be true
-      - TVSHOWURL=https://tvnow.best/api/list/user/pass/m3u8/tvshows/ # Full M3U Provider URL for TV Shows **TVSHOWS must be true
-      - EVENTURL=https://tvnow.best/api/list/user/pass/m3u8/events/ # Full M3U Provider URL for Events **EVENTS must be true
-      - APOLLO=true #Optional change to true if your Provider is Apollo
+    env_file: .env
     volumes:
-      - /path/to/folder/for/tv/strm/files1:/tv
-      - /path/to/folder/for/movie/strm/files1:/movies
-      - /path/to/folder/for/events/strm/files1:/events
-      - /path/to/logs:/logs
+      - /path/to/folder/for/tv/strm/files:/tv
+      - /path/to/folder/for/movie/strm/files:/movies
+      - /path/to/folder/for/events/strm/files:/events
+      - ./logs:/logs
+    restart: unless-stopped
 ```
 
 docker-cli
 ```yaml
 docker run -d \
   --name ustreamgen \
-  -e PUID=1000 \
-  -e PGID=1000 \
-  -e MOVIES=true \
-  -e TVSHOWS=true \
-  -e EVENTS=true \
-  -e TVCRONHOUR=0 #0-23 \
-  -e TVCRONMINUTE=10 #0-59 \
-  -e MOVIECRONHOUR=0 #0-23 \
-  -e MOVIECRONMINUTE=20 #0-59 \
-  -e EVENTCRONHOUR=0 #0-23 \
-  -e EVENTCRONMINUTE=30 #0-59 \
-  -e TZ=America/Chicago \
-  -e MOVIEURL=https://tvnow.best/api/list/user/pass/m3u8/movies/ \
-  -e TVSHOWURL=https://tvnow.best/api/list/user/pass/m3u8/tvshows/ \
-  -e EVENTURL=https://tvnow.best/api/list/user/pass/m3u8/events/ \
-  -e APOLLO=false \
-  -e SINGLELIST=false \
+  --env-file ./.env \
   -v /path/to/folder/for/tv/strm/files:/tv \
   -v /path/to/folder/for/movie/strm/files:/movies \
   -v /path/to/folder/for/events/strm/files:/events \
-  -v /path/to/logs:/logs
+  -v /path/to/logs:/logs \
   /root/initialize_cron.sh
 hooray4rob/ustreamgen:latest
 ```
