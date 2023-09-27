@@ -81,7 +81,7 @@ class TVEpisode(object):
 
 class rawStreamList(object):
   def __init__(self, filename):
-    self.log = logger.Logger(__file__, log_level=logger.LogLevel.DEBUG)
+    self.log = logger.Logger(__file__, log_level=logger.LogLevel.NORMAL)
     self.streams = {}
     self.filename = filename
     self.readLines()

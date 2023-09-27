@@ -98,6 +98,6 @@ jobs:
       uses: hmanzur/actions-set-secret@v2.0.0
       with:
         name: 'MINOR'
-        value: $((${{ secrets.MINOR }}+1))
+        value: $(${{ secrets.MINOR }}+1)
         repository: ${{ env.GHCRREPO }}/${{ env.NAME }}
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
