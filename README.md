@@ -70,7 +70,7 @@ docker run -d \
   -v /path/to/folder/for/events/strm/files:/events \
   -v /path/to/logs:/logs \
   /root/initialize_cron.sh
-hooray4rob/ustreamgen:latest
+ghcr.io/hooray4me/ustreamgen:v1.39-dev
 ```
 
 **Experimental** support for multiple providers:
@@ -79,6 +79,7 @@ Add tvproviders.txt and/or movieproviders.txt file to the container folder next 
 
 Populate the aforementioned files with the url to pull the m3u for each provider:
 IE
+tvproviders.txt
 ```
 https://tvnow.best/api/list/user/pass/m3u8/tvshows/1
 https://tvnow.best/api/list/user/pass/m3u8/tvshows/2
@@ -86,8 +87,12 @@ https://tvnow.best/api/list/user/pass/m3u8/tvshows/3
 https://tvnow.best/api/list/user/pass/m3u8/tvshows/4
 https://tvnow.best/api/list/user/pass/m3u8/tvshows/5
 ```
-
-Trim the .env file to **only** these variables:
+movieproviders.txt
+```
+https://tvnow.best/api/list/user1/pass1/m3u8/movies/
+https://tvnow.best/api/list/user2/pass2/m3u8/movies/
+```
+Trim the .env file to **only** these variables.
 
 ```
 TZ=America/Chicago #Optional timezone.
@@ -103,4 +108,41 @@ TVCRONHOUR=0 #0-23 # sets the hour of the day the script will run again for tv s
 TVCRONMINUTE=10 #0-59 # sets the minute of the day the script will run again for tv shows
 MULTIPLETVPROVIDERS=true
 MULTIPLEMOVIEPROVIDERS=true
+```
+Amend your docker-compose.yaml to include a volume for each provider.
+```yaml
+version: "3"
+services:
+  streamgen:
+    image: ghcr.io/hooray4me/ustreamgen:v1.39-dev
+    container_name: ustreamgen
+    command: /root/initialize_cron.sh
+    env_file: .env
+    volumes:
+      - ./tvshows1:/multipletvshows1 #naming convention :/multipletvshows* must stay the same
+      - ./tvshows2:/multipletvshows2
+      - ./movies1:/multiplemovies1 #naming convention :/multiplemovies* must stay the same
+      - ./movies2:/multiplemovies2
+      - ./movies3:/multiplemovies3
+      - ./movies4:/multiplemovies4
+      - ./movies5:/multiplemovies5
+      
+      - ./logs:/logs
+    restart: unless-stopped
+```
+docker-cli
+```yaml
+docker run -d \
+  --name ustreamgen \
+  --env-file ./.env \
+  -v ./tvshows1:/multipletvshows1 \
+  -v ./tvshows2:/multipletvshows2 \
+  -v ./movies1:/multiplemovies1 \
+  -v ./movies2:/multiplemovies2 \
+  -v ./movies3:/multiplemovies3 \
+  -v ./movies4:/multiplemovies4 \
+  -v ./movies5:/multiplemovies5 \
+  -v /path/to/logs:/logs \
+  /root/initialize_cron.sh
+ghcr.io/hooray4me/ustreamgen:v1.39-dev
 ```

@@ -34,10 +34,12 @@ def downloadAndParseLists(type, url, endrange):
         for i in range(1, endrange):
             downloadAndParseList(url  + str(i), type + '-' + str(i))
 
-def downloadAndParseList( url, filename):
+def downloadAndParseList( url, filename, path=None):
+        if path:
+            path = path
         print('...Starting Download...')
         print(wget.download(url, ('m3u/' + filename + '.m3u')))
-        streamClasses.rawStreamList('m3u/' + filename + '.m3u')
+        streamClasses.rawStreamList('m3u/' + filename + '.m3u', path)
         os.remove('m3u/' + filename + '.m3u')
 
 def moveToDestination(localdir, localfolder, destination, uid, gid):
@@ -52,12 +54,12 @@ def cleanTempDirectory(localdir,localfolder):
 
 def parseMultipleLists( type, url, localdir, moviesDestination=None, tvShowsDestination=None, uid=None, gid=None):
     downloadAndParseMultipleLists(type, url)
-
-    if moviesDestination is not None:
-        moveToDestination(localdir,'movies',moviesDestination, uid, gid)
-
-    if tvShowsDestination is not None: 
-        moveToDestination(localdir,'tvshows',tvShowsDestination, uid, gid)
+    count = 0
+    with open(url) as file:
+        for line in file:
+            print(line.rstrip())
+            count += 1
+            moveToDestination(localdir,type+str(count),'/'+type+str(count)+'/', uid, gid)
 
 def downloadAndParseMultipleLists(type, providerfile):
     count = 0
@@ -65,4 +67,4 @@ def downloadAndParseMultipleLists(type, providerfile):
         for line in file:
             count += 1
             print(line.rstrip())
-            downloadAndParseList(line.rstrip(), type + '-' + str(count))
+            downloadAndParseList(line.rstrip(), type + '-' + str(count), type+str(count))
