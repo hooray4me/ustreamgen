@@ -47,7 +47,7 @@ def moveToDestination(localdir, localfolder, destination, uid, gid):
     cleanTempDirectory(localdir, localfolder)
 
 def cleanTempDirectory(localdir,localfolder):
-    print('cleaning up events temp space')       
+    print('cleaning up temp space')       
     shutil.rmtree(localdir + '/' + localfolder + '/')
 
 def parseMultipleLists( type, url, localdir, moviesDestination=None, tvShowsDestination=None, uid=None, gid=None):
@@ -60,5 +60,9 @@ def parseMultipleLists( type, url, localdir, moviesDestination=None, tvShowsDest
         moveToDestination(localdir,'tvshows',tvShowsDestination, uid, gid)
 
 def downloadAndParseMultipleLists(type, providerfile):
-    for i, line in enumerate(providerfile):
-        downloadAndParseList(line, type + '-' + str(i))
+    count = 0
+    with open(providerfile) as file:
+        for line in file:
+            count += 1
+            print(line.rstrip())
+            downloadAndParseList(line.rstrip(), type + '-' + str(count))

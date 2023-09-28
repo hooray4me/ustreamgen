@@ -72,3 +72,35 @@ docker run -d \
   /root/initialize_cron.sh
 hooray4rob/ustreamgen:latest
 ```
+
+**Experimental** support for multiple providers:
+
+Add tvproviders.txt and/or movieproviders.txt file to the container folder next to the .env file.
+
+Populate the aforementioned files with the url to pull the m3u for each provider:
+IE
+```
+https://tvnow.best/api/list/user/pass/m3u8/tvshows/1
+https://tvnow.best/api/list/user/pass/m3u8/tvshows/2
+https://tvnow.best/api/list/user/pass/m3u8/tvshows/3
+https://tvnow.best/api/list/user/pass/m3u8/tvshows/4
+https://tvnow.best/api/list/user/pass/m3u8/tvshows/5
+```
+
+Trim the .env file to **only** these variables:
+
+```
+TZ=America/Chicago #Optional timezone.
+PUID=1024 #Optional UserID of the account that will run the service
+PGID=100 #Optional GroupID of the account that will run the service
+UID=1024 #Optional UserID for file permissions. Default: 1000
+GID=100 #Optional GroupID for file permissions. Default: 1000
+UNAME=admin #Optional name of UID. If used MUST match id of UID. Default: root
+GROUP=users #Optional name of GID. If used MUST match id of GID. Default: root
+MOVIECRONHOUR=0 #0-23 # sets the hour of the day the script will run again for movies
+MOVIECRONMINUTE=20 #0-59 # sets the minute of the day the script will run again for movies 
+TVCRONHOUR=0 #0-23 # sets the hour of the day the script will run again for tv shows
+TVCRONMINUTE=10 #0-59 # sets the minute of the day the script will run again for tv shows
+MULTIPLETVPROVIDERS=true
+MULTIPLEMOVIEPROVIDERS=true
+```

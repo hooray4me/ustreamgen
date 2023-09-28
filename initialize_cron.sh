@@ -10,9 +10,9 @@ touch /logs/cron.log
 crontab -r
 
 #create cron rule(s)
-if [ "$MULTIPLETVPROVIDERS" == "true" || "$MULTIPLEMOVIEPROVIDERS" == "true"]
+if [ "$MULTIPLETVPROVIDERS" == "true" ] ||[ "$MULTIPLEMOVIEPROVIDERS" == "true" ]
 then
-  if [ "$MULTIPLETVPROVIDERS" == "true"]
+  if [ "$MULTIPLETVPROVIDERS" == "true" ]
   then
     touch /logs/cron-multipletvproviders.log && cd /m3u2strm && python3 main.py $TVPROVIDERS multipletvshows $APOLLO /tv/ $UID $GID
     if [ -z "$CRON" ]
