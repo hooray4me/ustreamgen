@@ -53,7 +53,7 @@ COPY initialize_cron.sh /m3u2strm/
 
 RUN chmod +x /m3u2strm/initialize_cron.sh
 
-RUN chown ${uid}:${gid} /movies && chown ${uid}:${gid} /tv && chown ${uid}:${gid} /events && chown ${uid}:${gid} /logs
+RUN chown ${uid}:${gid} /m3u2strm
 
 USER ${uid}
 
