@@ -27,7 +27,7 @@ ENV EVENTURL=''
 
 RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
-RUN useradd ${UNAME} -u ${UID} -g ${GID} -m -s /bin/bash || echo "user already exists"
+RUN useradd -D ${UNAME} -u ${UID} -g ${GID} -s /bin/bash -h || echo "user already exists"
 
 RUN apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel nano && \
  apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -39,21 +39,17 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
-USER ${uid}
-
 WORKDIR /m3u2strm
 
 RUN bash -c 'mkdir -p ./m3u'
 
-COPY *.py ./
+COPY --chown=${uid}:${gid} *.py ./
 
 VOLUME /movies /tv /events /logs
 
-COPY initialize_cron.sh /m3u2strm/
+COPY --chown=${uid}:${gid} initialize_cron.sh /m3u2strm/
 
 RUN chmod +x /m3u2strm/initialize_cron.sh
-
-RUN chown ${uid}:${gid} /m3u2strm -R
 
 USER ${uid}
 
