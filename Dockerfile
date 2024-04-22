@@ -29,7 +29,7 @@ RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
 RUN useradd ${UNAME} -u ${UID} -g ${GID} -m -s /bin/bash || echo "user already exists"
 
-RUN apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel vi && \
+RUN apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel nano && \
  apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
