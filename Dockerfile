@@ -39,8 +39,6 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
-RUN mkdir /m3u2strm && chown ${uid}:${gid} /m3u2strm
-
 USER ${uid}
 
 WORKDIR /m3u2strm
@@ -54,6 +52,10 @@ VOLUME /movies /tv /events /logs
 COPY initialize_cron.sh /m3u2strm/
 
 RUN chmod +x /m3u2strm/initialize_cron.sh
+
+RUN chown -r ${uid}:${gid} /m3u2strm && chown ${uid}:${gid} /movies && chown ${uid}:${gid} /tv && chown ${uid}:${gid} /events && chown ${uid}:${gid} /logs
+
+USER ${uid}
 
 RUN crontab
 
