@@ -6,7 +6,7 @@ ARG UNAME=root
 ARG GROUP=root
 ARG DEBIAN_FRONTEND=noninteractive
 ENV APOLLO=false
-ENV SINGLELIST =true
+ENV SINGLELIST=true
 ENV MOVIES=true 
 ENV TVSHOWS=true
 ENV EVENTS=false
@@ -37,6 +37,8 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
+USER ${uid}
+
 WORKDIR /m3u2strm
 
 RUN bash -c 'mkdir -p ./m3u'
@@ -45,9 +47,9 @@ COPY *.py ./
 
 VOLUME /movies /tv /events /logs
 
-COPY initialize_cron.sh /root/
+COPY initialize_cron.sh /m3u2strm/
 
-RUN chmod 777 /root/initialize_cron.sh
+RUN chmod +x /m3u2strm/initialize_cron.sh
 
 RUN crontab
 
