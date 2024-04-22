@@ -29,7 +29,7 @@ RUN getent group ${GROUP} || groupadd -g ${GID} ${GROUP}
 
 RUN useradd ${UNAME} -u ${UID} -g ${GID} -m -s /bin/bash || echo "user already exists"
 
-RUN apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel && \
+RUN apt-get update && apt-get install --install-recommends -y apt-utils cron python3.8 python3.8-dev python3-pip python3-wheel vi && \
  apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
@@ -38,6 +38,8 @@ COPY requirements.txt ./
 
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
+
+RUN mkdir /m3u2strm && chown ${uid}:${gid} /m3u2strm
 
 USER ${uid}
 
