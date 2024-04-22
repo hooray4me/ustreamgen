@@ -47,7 +47,7 @@ VOLUME /movies /tv /events /logs
 
 COPY initialize_cron.sh /root/
 
-RUN chmod +x /root/initialize_cron.sh
+RUN chmod 777 /root/initialize_cron.sh
 
 RUN crontab
 
