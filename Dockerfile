@@ -53,7 +53,7 @@ COPY initialize_cron.sh /m3u2strm/
 
 RUN chmod +x /m3u2strm/initialize_cron.sh
 
-RUN chown ${uid}:${gid} /m3u2strm
+RUN chown ${uid}:${gid} /m3u2strm -R
 
 USER ${uid}
 
